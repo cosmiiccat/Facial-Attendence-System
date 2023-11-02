@@ -1,4 +1,5 @@
 import face_recognition
+import send_mail
 import pickle 
 import os
  
@@ -15,12 +16,17 @@ for img in os.listdir(target_path):
         students_encodings.append(encoding)
         raw_name = (img.split(".")[0]).split("_")
         name = ""
+        reg_no = raw_name[-1]
+        mail_id = 21000 + int(reg_no) - 660
+        raw_name.pop()
         for _name in raw_name:
             name += _name
             name += " "
         
         credentials.append({
-            "name": name
+            "name": name,
+            "reg_no": reg_no,
+            "mail": f"cse{mail_id}@iiitkalyani.ac.in"
         })
 
 print(students_encodings)

@@ -3,6 +3,7 @@ import face_recognition
 import numpy as np
 import pickle
 import cv2
+import send_mail
 
 video_capture = cv2.VideoCapture(0)
 
@@ -18,7 +19,7 @@ with open("student_attendence.csv", "w") as sheet:
 
         with open("./students_db/Credentials/students_credentials.pkl", "rb") as file:
             students_credentials = pickle.load(file)
-    
+            
             while True:
                 _,frame = video_capture.read()
                 small_frame = cv2.resize(frame,(0,0),fx=0.25,fy=0.25)
@@ -38,10 +39,13 @@ with open("student_attendence.csv", "w") as sheet:
                             best_match_index = np.argmin(face_distance)
                             if matches[best_match_index] and best_match_index not in attendence_done:
                                 name = students_credentials[best_match_index]["name"]
+                                mail_id = students_credentials[best_match_index]["mail"]
                                 current_time = now.strftime("%H-%M-%S")
                                 cur_attend = f"{name}, {current_date}, {current_time}\n"
                                 sheet.write(cur_attend)
+                                send_mail.mail(mail_id,name)
                                 attendence_done.append(best_match_index)
+
 
                 cv2.imshow("attendence system",frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
