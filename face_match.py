@@ -4,6 +4,8 @@ import numpy as np
 import pickle
 import cv2
 import send_mail
+import pyfirmata
+
 
 video_capture = cv2.VideoCapture(0)
 
