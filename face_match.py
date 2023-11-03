@@ -4,6 +4,12 @@ import numpy as np
 import pickle
 import cv2
 import send_mail
+import pyfirmata
+import time
+
+comport = 'COM3'
+board = pyfirmata.Arduino(comport)
+buzzer = board.get_pin('d:13:o')
 
 video_capture = cv2.VideoCapture(0)
 
@@ -45,6 +51,9 @@ with open("student_attendence.csv", "w") as sheet:
                                 sheet.write(cur_attend)
                                 send_mail.mail(mail_id,name)
                                 attendence_done.append(best_match_index)
+                                buzzer.write(1)
+                                time.sleep(1)
+                                buzzer.write(0)
 
 
                 cv2.imshow("attendence system",frame)
